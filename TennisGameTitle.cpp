@@ -47,7 +47,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			Title(&scene);
 			break;
 		case GAME:
-			Game(&scene,img,bgm,&reset,&circle,&resetCircle,&box,&resetBox,/*targetBox,*/time(NULL));
+			Game(&scene,img,bgm,&reset,&circle,&resetCircle,&box,&resetBox,time(NULL));
 			break;
 		case GAMEOVER:
 			if (reset) {
