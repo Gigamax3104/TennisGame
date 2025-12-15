@@ -1,6 +1,4 @@
 #include	"TennisInclude.h"
-#include	<stdlib.h>
-#include	<math.h>
 
 static bool ErrorCheck(int* bgm, const int bgmSize);
 static void Title(int* scene);
