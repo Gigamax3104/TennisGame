@@ -9,23 +9,27 @@
 #define YELLOW 0xffff00
 #define OLANGE 0xee7800
 
+//シーンの列挙体
 enum Scene {
 	TITLE,
 	GAME,
 	GAMEOVER
 };
 
+//位置・幅等に用いる構造体
 struct Vector2 {
 	int x;
 	int y;
 };
 
+//円の構造体
 struct Circle {
 	Vector2 pos;
 	int radius;
 	Vector2 circleScalar;
 };
 
+//プレイヤーが動かす矩形の構造体
 struct PlayerBox {
 	Vector2 pos;
 	Vector2 length;
@@ -38,4 +42,5 @@ struct PlayerBox {
 //	Vector2 length;
 //};
 
+//共有する関数
 void Game(int* scene, const int img, const int* bgm, bool* reset, Circle* circle,const Circle* resetCircle, PlayerBox* box,const PlayerBox* resetBox,time_t nowTime);

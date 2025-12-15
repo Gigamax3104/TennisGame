@@ -7,30 +7,37 @@ static void Draw(const int score,const int highScore,const int img,const Circle*
 static void Reset(int* score, Circle* circle, const Circle* resetCircle, PlayerBox* box, const PlayerBox* resetBox);
 
 void Game(int* scene,const int img,const int* bgm,bool* reset,Circle* circle,const Circle* resetCircle, PlayerBox* box,const PlayerBox* resetBox,time_t nowTime) {
+	//スコア用変数
 	static int score = 0;
 	static int highScore = 0;
 
+	//一度のみの跳ね返りを制御する変数
 	static bool bounce = false;
+
+	//bgmを再生するための変数
 	static bool playSound = true;
 
+	//bgm再生
 	if (playSound) {
 		ChangeVolumeSoundMem(128, bgm[0]);
 		PlaySoundMem(bgm[0], DX_PLAYTYPE_LOOP);
 		playSound = false;
 	}
 
-	if (!Move(circle, box)) {
+	//もし、円が画面の一番下まで行ってしまった場合は、GAME OVERとなる。(その際に、音楽を止め、変数をリセットする。)
+	if (!Move(circle, box)) { // 73行目～95行目
 		StopSoundMem(bgm[0]);
 		PlaySoundMem(bgm[1], DX_PLAYTYPE_BACK);
 
-		Reset(&score, circle, resetCircle, box, resetBox);
+		Reset(&score, circle, resetCircle, box, resetBox); // 139行目～147行目
 
 		*reset = true;
 		playSound = true;
 		*scene = GAMEOVER;
 	}
+	//一番下以外では矩形と円の当たり判定を調べる。(詳細はJudge関数にて掲載)
 	else {
-		int judge = Judge(&bounce,circle, box);
+		int judge = Judge(&bounce,circle, box); // 97行目～121行目
 
 		if (!bounce && judge == 2) {
 			PlaySoundMem(bgm[2], DX_PLAYTYPE_BACK);
@@ -58,7 +65,8 @@ void Game(int* scene,const int img,const int* bgm,bool* reset,Circle* circle,con
 			bounce = true;
 		}
 
-		Draw(score, highScore,img,circle, box);
+		//描画する関数(123行目～141行目)
+		Draw(score, highScore,img,circle, box); 
 	}
 }
 
@@ -113,21 +121,20 @@ static int Judge(bool* bounce,const Circle* circle,const PlayerBox* box) {
 }
 
 static void Draw(const int score, const int highScore,const int img, const Circle* circle, const PlayerBox* box) {
+	//背景
 	DrawGraph(0, 0, img, TRUE);
 
+	//円
 	DrawCircle(circle->pos.x, circle->pos.y, circle->radius, RED, TRUE);
 	DrawCircle(circle->pos.x - circle->radius / 4, circle->pos.y - circle->radius / 4, circle->radius / 2, 0xffa0a0, TRUE);
 	DrawCircle(circle->pos.x - circle->radius / 4, circle->pos.y - circle->radius / 4, circle->radius / 4, WHITE, TRUE);
 	
+	//矩形
 	DrawBox(box->pos.x - box->length.x / 2 - 2, box->pos.y - box->length.y / 2 - 2, box->pos.x + box->length.x / 2, box->pos.y + box->length.y / 2, 0x40c0ff, TRUE);
 	DrawBox(box->pos.x - box->length.x / 2, box->pos.y - box->length.y / 2, box->pos.x + box->length.x / 2 + 2, box->pos.y + box->length.y / 2 + 2, 0x204080, TRUE);
 	DrawBox(box->pos.x - box->length.x / 2, box->pos.y - box->length.y / 2, box->pos.x + box->length.x / 2, box->pos.y + box->length.y / 2, 0x0080ff, TRUE);
-	//while (targetBox->pos.x != NULL) {
-	//	DrawBox(targetBox->pos.x - targetBox->length.x / 2, targetBox->pos.y - targetBox->length.y / 2,
-	//			targetBox->pos.x + targetBox->length.x / 2, targetBox->pos.y + targetBox->length.y / 2, WHITE, TRUE);
-	//	targetBox++;
-	//}
 
+	//スコア
 	SetFontSize(30);
 	DrawFormatString(0, 30, WHITE, "Score:%d点", score);
 	DrawFormatString(WIDTH - 250, 30, YELLOW, "HighScore:%d点", highScore);

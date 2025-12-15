@@ -12,10 +12,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetBackgroundColor(0, 0, 0);
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	//シーン管理
 	int scene = TITLE;
 
+	//画像
 	int img = LoadGraph("image/bg.png");
 
+	//音楽
 	int bgm[] = {
 		LoadSoundMem("sound/bgm.mp3"),
 		LoadSoundMem("sound/gameover.mp3"),
@@ -24,30 +27,36 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	};
 	const int bgmSize = sizeof bgm / sizeof bgm[0];
 
+	//円の情報
 	Circle circle = { WIDTH / 2,HEIGHT / 2,30,5,-5 };
 	Circle resetCircle = circle;
 
+	//矩形の情報
 	PlayerBox box = { WIDTH / 2,HEIGHT - 80,150,20,10 };
 	PlayerBox resetBox = box;
 
+	//リトライ用の変数
 	bool reset = false;
 
+	//シーン読み込み終わりの最初の時間
 	static time_t startTimer = time(NULL);
 
 	while (1) {
+		//エラーチェック(80行目～83行目)
 		if (img == -1) break;
 		if (ErrorCheck(bgm, bgmSize)) break;
 
 		ClearDrawScreen();
 
+		//シーンに応じて処理が行われる。
 		switch (scene) {
-		case TITLE:
+		case TITLE: // 86行目～93行目
 			Title(&scene);
 			break;
-		case GAME:
+		case GAME: // Tennis.cppファイルへ移動
 			Game(&scene,img,bgm,&reset,&circle,&resetCircle,&box,&resetBox,time(NULL));
 			break;
-		case GAMEOVER:
+		case GAMEOVER: // 95行目～101行目
 			if (reset) {
 				startTimer = time(NULL);
 				reset = false;
@@ -55,6 +64,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			GameOver(&scene,startTimer,time(NULL));
 			break;
 		}
+
 		ScreenFlip();
 		WaitTimer(16);
 		if (ProcessMessage() == -1) break;
