@@ -2,9 +2,10 @@
 #include	"DxLib.h"
 #include	<time.h>
 
-#define WIDTH 1280 
-#define HEIGHT 720
+#define WIDTH 960 
+#define HEIGHT 640
 #define WHITE 0xffffff
+#define RED 0xff0000
 #define YELLOW 0xffff00
 #define OLANGE 0xee7800
 
@@ -25,10 +26,16 @@ struct Circle {
 	Vector2 circleScalar;
 };
 
-struct Box {
+struct PlayerBox {
 	Vector2 pos;
 	Vector2 length;
 	int boxScalar;
 };
 
-void Game(int* scene, Circle* circle, Box* box,time_t nowTime);
+//ブロック崩しみたいに作成したかったけど、時間がなかったため、下の構造体は無しにした。
+//struct TargetBox {
+//	Vector2 pos;
+//	Vector2 length;
+//};
+
+void Game(int* scene, const int img, const int* bgm, bool* reset, Circle* circle,const Circle* resetCircle, PlayerBox* box,const PlayerBox* resetBox,time_t nowTime);
