@@ -50,13 +50,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		//シーンに応じて処理が行われる。
 		switch (scene) {
-		case TITLE: // 86行目～93行目
+		case TITLE: // 87行目～94行目
 			Title(&scene);
 			break;
 		case GAME: // Tennis.cppファイルへ移動
 			Game(&scene,img,bgm,&reset,&circle,&resetCircle,&box,&resetBox,time(NULL));
 			break;
-		case GAMEOVER: // 95行目～101行目
+		case GAMEOVER: // 97行目～103行目
 			if (reset) {
 				startTimer = time(NULL);
 				reset = false;
@@ -83,6 +83,7 @@ static bool ErrorCheck(int* bgm,const int bgmSize) {
 	return false;
 }
 
+//タイトル画面を映す関数
 static void Title(int* scene) {
 	SetFontSize(120);
 	DrawString(WIDTH / 2 - 120 * 3 + 120 / 12, HEIGHT / 2 - 120 * 2, "Tennis Game", OLANGE);
@@ -92,6 +93,7 @@ static void Title(int* scene) {
 	if (CheckHitKey(KEY_INPUT_SPACE)) *scene = GAME;
 }
 
+//ゲームオーバー画面を映す関数
 static void GameOver(int* scene,const time_t startTimer, const time_t nowTime) {
 	double explasedTime = (double)nowTime - startTimer;
 
