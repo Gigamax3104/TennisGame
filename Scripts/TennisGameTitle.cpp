@@ -43,7 +43,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	static time_t startTimer = time(NULL);
 
 	while (1) {
-		//エラーチェック(82行目～85行目)
+		//エラーチェック(83行目～86行目)
 		if (img == -1) break;
 		if (ErrorCheck(bgm, bgmSize)) break;
 
@@ -51,13 +51,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		//シーンに応じて処理が行われる。
 		switch (scene) {
-		case TITLE: // 88行目～95行目
+		case TITLE: // 89行目～96行目
 			Title(&scene,bgm[3]);
 			break;
 		case GAME: // Tennis.cppファイルへ移動
 			Game(&scene,img,bgm,&reset,&circle,&resetCircle,&box,&resetBox,time(NULL));
 			break;
-		case GAMEOVER: // 98行目～104行目
+		case GAMEOVER: // 99行目～105行目
 			if (reset) {
 				startTimer = time(NULL);
 				reset = false;
