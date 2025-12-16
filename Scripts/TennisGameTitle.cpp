@@ -1,7 +1,7 @@
 #include	"Header/TennisInclude.h"
 
 static bool ErrorCheck(int* bgm, const int bgmSize);
-static void Title(int* scene);
+static void Title(int* scene, const int& bgm);
 static void GameOver(int* scene,const time_t startTimer, const time_t nowTime);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -23,6 +23,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		LoadSoundMem("sound/bgm.mp3"),
 		LoadSoundMem("sound/gameover.mp3"),
 		LoadSoundMem("sound/hit.mp3"),
+		LoadSoundMem("sound/8bit_Game_Menu.mp3")
 
 	};
 	const int bgmSize = sizeof bgm / sizeof bgm[0];
@@ -51,7 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		//シーンに応じて処理が行われる。
 		switch (scene) {
 		case TITLE: // 88行目～95行目
-			Title(&scene);
+			Title(&scene,bgm[3]);
 			break;
 		case GAME: // Tennis.cppファイルへ移動
 			Game(&scene,img,bgm,&reset,&circle,&resetCircle,&box,&resetBox,time(NULL));
@@ -85,13 +86,24 @@ static bool ErrorCheck(int* bgm,const int bgmSize) {
 }
 
 //タイトル画面を映す関数
-static void Title(int* scene) {
+static void Title(int* scene,const int& bgm) {
+	static bool playSound = true;
+
+	if (playSound) {
+		PlaySoundMem(bgm, DX_PLAYTYPE_LOOP);
+		playSound = false;
+	}
+
 	SetFontSize(120);
 	DrawString(WIDTH / 2 - 120 * 3 + 120 / 12, HEIGHT / 2 - 120 * 2, "Tennis Game", OLANGE);
 	SetFontSize(40);
 	if(time(NULL) % 2 == 0) DrawString(WIDTH / 2 - 40 * 5 - 40 / 4, HEIGHT / 2 + 60 * 3, "Press SPACE to start", WHITE);
 
-	if (CheckHitKey(KEY_INPUT_SPACE)) *scene = GAME;
+	if (CheckHitKey(KEY_INPUT_SPACE)) {
+		StopSoundMem(bgm);
+		playSound = true;
+		*scene = GAME;
+	}
 }
 
 //ゲームオーバー画面を映す関数
@@ -100,5 +112,5 @@ static void GameOver(int* scene,const time_t startTimer, const time_t nowTime) {
 
 	SetFontSize(100);
 	DrawString(WIDTH / 2 - 100 * 2 - 50, HEIGHT / 2 - 50, "GAME OVER", RED);
-	if (explasedTime >= 5) *scene = TITLE;
+	if (explasedTime >= 6) *scene = TITLE;
 }
